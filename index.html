@@ -1525,26 +1525,27 @@ async function analyzePhoto(base64, mediaType) {
     let parsed;
     try { parsed = JSON.parse(raw); } catch(e) { throw new Error('Parse error'); }
 
-    // Select pillar
+    // Select pillar first, then fill fields after DOM settles
     if (parsed.pillar) {
       const pillarBtn = document.querySelector(`.pillar-btn[data-pillar="${parsed.pillar}"]`);
       if (pillarBtn) selectPillar(pillarBtn);
     }
 
-    // Fill fields with delay so pillar re-render completes
+    // Wait for pillar re-render then fill fields
     setTimeout(() => {
       const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
       set('f-project', parsed.project);
       set('f-room', parsed.room);
       set('f-details', parsed.details);
       set('f-mood', parsed.mood);
-      set('f-material', parsed.material);
+      set('f-material', parsed.material || parsed.room);
       set('f-brand', parsed.brand);
       set('f-moment', parsed.room);
-    }, 150);
+      set('f-feeling', parsed.mood);
 
-    msgEl.textContent = '✦ Brief filled in — review and edit before generating';
-    setTimeout(() => { statusEl.style.display = 'none'; }, 3500);
+      msgEl.textContent = '✦ Brief filled in — review and edit before generating';
+      setTimeout(() => { statusEl.style.display = 'none'; }, 3500);
+    }, 400);
 
   } catch(err) {
     msgEl.textContent = 'Photo uploaded — fill in the brief below and generate.';
@@ -1583,14 +1584,18 @@ function buildBrief() {
   const get = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
   let brief = `Pillar: ${currentPillar}\nTone emphasis: ${currentTone}\nEnd with: ${currentCTA}\nLength instruction: ${getLengthInstruction()}\n`;
 
+  if (currentPhotoBase64) {
+    brief += `Note: A photo has been provided — use it as your primary source for visual details, materials, and mood.\n`;
+  }
+
   if (currentPillar === 'finished') {
-    brief += `Project: ${get('f-project')}\nRoom: ${get('f-room')}\nKey details: ${get('f-details')}\nMood: ${get('f-mood')}`;
+    brief += `Project: ${get('f-project') || 'Not specified'}\nRoom: ${get('f-room') || 'See photo'}\nKey details: ${get('f-details') || 'See photo'}\nMood: ${get('f-mood') || 'See photo'}`;
   } else if (currentPillar === 'bts') {
-    brief += `Project: ${get('f-project')}\nWhat's happening: ${get('f-details')}\nTimeline: ${get('f-timeline')}`;
+    brief += `Project: ${get('f-project') || 'Not specified'}\nWhat's happening: ${get('f-details') || 'See photo'}\nTimeline: ${get('f-timeline') || 'Not specified'}`;
   } else if (currentPillar === 'materials') {
-    brief += `Material: ${get('f-material')}\nBrand: ${get('f-brand')}\nWhy special: ${get('f-details')}`;
+    brief += `Material: ${get('f-material') || 'See photo'}\nBrand: ${get('f-brand') || 'Not specified'}\nWhy special: ${get('f-details') || 'See photo'}`;
   } else if (currentPillar === 'lifestyle') {
-    brief += `Moment: ${get('f-moment')}\nDescription: ${get('f-details')}\nMeaning: ${get('f-feeling')}`;
+    brief += `Moment: ${get('f-moment') || 'See photo'}\nDescription: ${get('f-details') || 'See photo'}\nMeaning: ${get('f-feeling') || 'Not specified'}`;
   }
 
   return brief;
