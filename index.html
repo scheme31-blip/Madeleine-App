@@ -188,8 +188,109 @@ header {
   transition: all 0.12s;
 }
 
+/* Photo upload */
+.photo-drop {
+  border: 1px dashed var(--stone);
+  border-radius: 2px;
+  height: 160px;
+  cursor: pointer;
+  transition: all 0.15s;
+  overflow: hidden;
+  position: relative;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-drop:hover { border-color: var(--accent); background: var(--warm-white); }
+.photo-drop.has-photo { border-style: solid; border-color: var(--line); }
+
+.photo-drop-inner {
+  text-align: center;
+  pointer-events: none;
+}
+
+.photo-drop-icon { font-size: 28px; margin-bottom: 8px; opacity: 0.5; }
+
+.photo-drop-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--charcoal);
+  margin-bottom: 4px;
+}
+
+.photo-drop-hint { font-size: 10px; color: var(--taupe); }
+
+.photo-change-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(46,43,40,0.75);
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-family: 'Jost', sans-serif;
+  border-radius: 2px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.analyze-bar {
+  height: 2px;
+  background: var(--line);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.analyze-bar-inner {
+  height: 100%;
+  width: 30%;
+  background: var(--accent);
+  animation: slide 1.2s ease-in-out infinite;
+}
+
 .opt-chip:hover { border-color: var(--stone); color: var(--charcoal); }
 .opt-chip.active { border-color: var(--accent); background: var(--cream); color: var(--accent); }
+
+/* Caption length toggle */
+.length-toggle {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.length-btn {
+  border: 1px solid var(--line);
+  background: transparent;
+  padding: 10px 8px;
+  cursor: pointer;
+  font-family: 'Jost', sans-serif;
+  text-align: center;
+  border-radius: 2px;
+  transition: all 0.15s;
+}
+
+.length-btn:hover { border-color: var(--stone); background: var(--cream); }
+.length-btn.active { border-color: var(--accent); background: var(--cream); }
+.length-btn.active .length-name { color: var(--accent); }
+
+.length-name {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--charcoal);
+  margin-bottom: 3px;
+}
+
+.length-hint {
+  display: block;
+  font-size: 9px;
+  color: var(--taupe);
+  line-height: 1.4;
+}
 
 /* Generate button */
 .gen-btn {
@@ -893,7 +994,27 @@ header {
   <!-- Sidebar -->
   <div class="sidebar">
     <div class="sidebar-title">New post</div>
-    <div class="sidebar-sub">Fill in the brief — get a caption, hashtags, and schedule.</div>
+    <div class="sidebar-sub">Upload a photo — Claude will analyze it and fill in the brief for you.</div>
+
+    <!-- Photo upload -->
+    <div class="field">
+      <label>Photo</label>
+      <div class="photo-drop" id="photo-drop" onclick="document.getElementById('photo-input').click()">
+        <div class="photo-drop-inner" id="photo-drop-inner">
+          <div class="photo-drop-icon">📷</div>
+          <div class="photo-drop-text">Tap to upload a photo</div>
+          <div class="photo-drop-hint">Claude will analyze it and fill in the brief</div>
+        </div>
+        <img id="photo-preview" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:2px;" />
+      </div>
+      <input type="file" id="photo-input" accept="image/*" style="display:none;" onchange="handlePhotoUpload(this)">
+      <div id="analyze-status" style="display:none; margin-top:8px;">
+        <div class="analyze-bar"><div class="analyze-bar-inner"></div></div>
+        <div style="font-size:11px; color:var(--taupe); font-style:italic; margin-top:6px;" id="analyze-msg">Analyzing photo...</div>
+      </div>
+    </div>
+
+    <hr class="divider">
 
     <!-- Pillar selection -->
     <div class="field">
@@ -937,6 +1058,25 @@ header {
         <button class="opt-chip" data-val="client-story" onclick="toggleChip(this, 'tone')">Client story</button>
         <button class="opt-chip" data-val="process" onclick="toggleChip(this, 'tone')">Process</button>
         <button class="opt-chip" data-val="feeling" onclick="toggleChip(this, 'tone')">Feeling</button>
+      </div>
+    </div>
+
+    <!-- Caption length -->
+    <div class="field">
+      <label>Caption length</label>
+      <div class="length-toggle">
+        <button class="length-btn" data-len="short" onclick="selectLength(this)">
+          <span class="length-name">Short & sweet</span>
+          <span class="length-hint">2–3 sentences</span>
+        </button>
+        <button class="length-btn active" data-len="standard" onclick="selectLength(this)">
+          <span class="length-name">Standard</span>
+          <span class="length-hint">3–5 sentences</span>
+        </button>
+        <button class="length-btn" data-len="expanded" onclick="selectLength(this)">
+          <span class="length-name">Expanded</span>
+          <span class="length-hint">6–8 sentences, rich detail</span>
+        </button>
       </div>
     </div>
 
@@ -1235,6 +1375,7 @@ Hashtag rules: 8–12 tags total, mix of: 2-3 core brand tags, 2-3 location/styl
 let currentPillar = 'finished';
 let currentTone = 'craftsmanship';
 let currentCTA = 'question';
+let currentLength = 'standard';
 let lastCaption = '';
 let lastHashtags = [];
 let lastPostingDay = 'Monday';
@@ -1309,7 +1450,126 @@ const scheduleMap = {
   lifestyle: { day: 'Friday', reason: 'Personal content closes the week warmly' }
 };
 
-function selectPillar(btn) {
+// ── Photo upload & analysis ──
+let currentPhotoBase64 = null;
+
+async function handlePhotoUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  // Show preview
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const base64 = e.target.result.split(',')[1];
+    currentPhotoBase64 = base64;
+    const mediaType = file.type || 'image/jpeg';
+
+    // Show preview image
+    const preview = document.getElementById('photo-preview');
+    preview.src = e.target.result;
+    preview.style.display = 'block';
+    document.getElementById('photo-drop-inner').style.display = 'none';
+    document.getElementById('photo-drop').classList.add('has-photo');
+
+    // Add change button if not already there
+    if (!document.getElementById('photo-change-btn')) {
+      const changeBtn = document.createElement('button');
+      changeBtn.id = 'photo-change-btn';
+      changeBtn.className = 'photo-change-btn';
+      changeBtn.textContent = 'Change photo';
+      changeBtn.onclick = (ev) => { ev.stopPropagation(); document.getElementById('photo-input').click(); };
+      document.getElementById('photo-drop').appendChild(changeBtn);
+    }
+
+    // Analyze the photo
+    await analyzePhoto(base64, mediaType);
+  };
+  reader.readAsDataURL(file);
+}
+
+async function analyzePhoto(base64, mediaType) {
+  const statusEl = document.getElementById('analyze-status');
+  const msgEl = document.getElementById('analyze-msg');
+  statusEl.style.display = 'block';
+  msgEl.textContent = 'Analyzing your photo...';
+
+  try {
+    const response = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 800,
+        messages: [{
+          role: 'user',
+          content: [
+            {
+              type: 'image',
+              source: { type: 'base64', media_type: mediaType, data: base64 }
+            },
+            {
+              type: 'text',
+              text: `You are analyzing an interior design photo for Madeleine Interiors, a refined design studio in Newport Beach / Los Angeles. 
+
+Analyze this photo and respond with ONLY a JSON object — no markdown, no backticks:
+{
+  "pillar": "finished" or "bts" or "materials" or "lifestyle",
+  "project": "brief location or project name if determinable, otherwise empty string",
+  "room": "room type or subject (e.g. Living room, Kitchen, Primary bedroom, Marble slab, Hardware detail)",
+  "details": "comma-separated list of 3-5 specific materials, finishes, or design elements visible (e.g. honed marble fireplace, linen drapery, unlacquered brass hardware, walnut cabinetry)",
+  "mood": "the overall feeling of the space or image (e.g. warm and refined, quietly layered, coastal and relaxed)",
+  "material": "if this is a material close-up, name the specific material",
+  "brand": "brand name if any product is identifiable, otherwise empty string"
+}`
+            }
+          ]
+        }]
+      })
+    });
+
+    const data = await response.json();
+    const raw = data.content?.[0]?.text || '';
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+
+    // Auto-select the right pillar
+    if (parsed.pillar) {
+      const pillarBtn = document.querySelector(`.pillar-btn[data-pillar="${parsed.pillar}"]`);
+      if (pillarBtn) selectPillar(pillarBtn);
+    }
+
+    // Fill in the fields after a short delay to let pillar render
+    setTimeout(() => {
+      const setVal = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+      setVal('f-project', parsed.project);
+      setVal('f-room', parsed.room);
+      setVal('f-details', parsed.details);
+      setVal('f-mood', parsed.mood);
+      setVal('f-material', parsed.material);
+      setVal('f-brand', parsed.brand);
+      setVal('f-moment', parsed.room);
+    }, 100);
+
+    msgEl.textContent = '✦ Brief filled in — review and edit before generating';
+    setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
+
+  } catch(err) {
+    msgEl.textContent = 'Could not analyze photo — please fill in the brief manually.';
+    setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
+  }
+}
+
+function selectLength(btn) {
+  document.querySelectorAll('.length-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentLength = btn.dataset.len;
+}
+
+function getLengthInstruction() {
+  if (currentLength === 'short') return 'Write a SHORT caption: 2–3 sentences maximum. Punchy, confident, and precise. Let the image do most of the talking.';
+  if (currentLength === 'expanded') return 'Write an EXPANDED caption: 6–8 sentences. Be richly descriptive — name every key material, describe the tactile quality of surfaces, explain the design decisions and why they were made, paint a picture of how the space feels to be in. Weave in Madeleine\'s philosophy naturally. This should feel like a thoughtful editorial piece about the space.';
+  return 'Write a STANDARD caption: 3–5 sentences. Balanced — specific enough to feel considered, concise enough to hold attention.';
+}
   document.querySelectorAll('.pillar-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   currentPillar = btn.dataset.pillar;
@@ -1326,7 +1586,7 @@ function toggleChip(btn, group) {
 
 function buildBrief() {
   const get = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
-  let brief = `Pillar: ${currentPillar}\nTone emphasis: ${currentTone}\nEnd with: ${currentCTA}\n`;
+  let brief = `Pillar: ${currentPillar}\nTone emphasis: ${currentTone}\nEnd with: ${currentCTA}\nLength instruction: ${getLengthInstruction()}\n`;
 
   if (currentPillar === 'finished') {
     brief += `Project: ${get('f-project')}\nRoom: ${get('f-room')}\nKey details: ${get('f-details')}\nMood: ${get('f-mood')}`;
@@ -1390,7 +1650,10 @@ async function generate() {
         model: 'claude-sonnet-4-6',
         max_tokens: 1000,
         system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: `Here is the post brief:\n\n${brief}\n\nGenerate the caption and hashtags now.` }]
+        messages: [{ role: 'user', content: currentPhotoBase64 ? [
+          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: currentPhotoBase64 } },
+          { type: 'text', text: `Here is the post brief:\n\n${brief}\n\nGenerate the caption and hashtags now. Use the photo for additional visual context about materials, mood, and details.` }
+        ] : `Here is the post brief:\n\n${brief}\n\nGenerate the caption and hashtags now.` }]
       })
     });
 
