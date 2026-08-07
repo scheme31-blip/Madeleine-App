@@ -1562,6 +1562,8 @@ function getLengthInstruction() {
   if (currentLength === 'expanded') return 'Write an EXPANDED caption: 6–8 sentences. Be richly descriptive — name every key material, describe the tactile quality of surfaces, explain the design decisions and why they were made, paint a picture of how the space feels to be in. Weave in Madeleine\'s philosophy naturally. This should feel like a thoughtful editorial piece about the space.';
   return 'Write a STANDARD caption: 3–5 sentences. Balanced — specific enough to feel considered, concise enough to hold attention.';
 }
+
+function selectPillar(btn) {
   document.querySelectorAll('.pillar-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   currentPillar = btn.dataset.pillar;
