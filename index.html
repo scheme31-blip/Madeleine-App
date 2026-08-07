@@ -999,8 +999,8 @@ header {
     <!-- Photo upload -->
     <div class="field">
       <label>Photo</label>
-      <div class="photo-drop" id="photo-drop" onclick="document.getElementById('photo-input').click()">
-        <div class="photo-drop-inner" id="photo-drop-inner">
+      <div class="photo-drop" id="photo-drop">
+        <div class="photo-drop-inner" id="photo-drop-inner" onclick="document.getElementById('photo-input').click()" style="cursor:pointer; width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;">
           <div class="photo-drop-icon">📷</div>
           <div class="photo-drop-text">Tap to upload a photo</div>
           <div class="photo-drop-hint">Claude will analyze it and fill in the brief</div>
@@ -1452,37 +1452,42 @@ const scheduleMap = {
 
 // ── Photo upload & analysis ──
 let currentPhotoBase64 = null;
+let currentPhotoMediaType = 'image/jpeg';
 
-async function handlePhotoUpload(input) {
+function handlePhotoUpload(input) {
   const file = input.files[0];
   if (!file) return;
 
-  // Show preview
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    const base64 = e.target.result.split(',')[1];
-    currentPhotoBase64 = base64;
-    const mediaType = file.type || 'image/jpeg';
+  currentPhotoMediaType = file.type || 'image/jpeg';
 
-    // Show preview image
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    currentPhotoBase64 = dataUrl.split(',')[1];
+
+    // Show preview
     const preview = document.getElementById('photo-preview');
-    preview.src = e.target.result;
+    preview.src = dataUrl;
     preview.style.display = 'block';
     document.getElementById('photo-drop-inner').style.display = 'none';
     document.getElementById('photo-drop').classList.add('has-photo');
 
-    // Add change button if not already there
+    // Add change button
     if (!document.getElementById('photo-change-btn')) {
-      const changeBtn = document.createElement('button');
-      changeBtn.id = 'photo-change-btn';
-      changeBtn.className = 'photo-change-btn';
-      changeBtn.textContent = 'Change photo';
-      changeBtn.onclick = (ev) => { ev.stopPropagation(); document.getElementById('photo-input').click(); };
-      document.getElementById('photo-drop').appendChild(changeBtn);
+      const btn = document.createElement('button');
+      btn.id = 'photo-change-btn';
+      btn.className = 'photo-change-btn';
+      btn.textContent = 'Change photo';
+      btn.onclick = (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        document.getElementById('photo-input').click();
+      };
+      document.getElementById('photo-drop').appendChild(btn);
     }
 
-    // Analyze the photo
-    await analyzePhoto(base64, mediaType);
+    // Analyze — don't await, run in background
+    analyzePhoto(currentPhotoBase64, currentPhotoMediaType);
   };
   reader.readAsDataURL(file);
 }
@@ -1499,62 +1504,49 @@ async function analyzePhoto(base64, mediaType) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 800,
+        max_tokens: 600,
         messages: [{
           role: 'user',
           content: [
-            {
-              type: 'image',
-              source: { type: 'base64', media_type: mediaType, data: base64 }
-            },
-            {
-              type: 'text',
-              text: `You are analyzing an interior design photo for Madeleine Interiors, a refined design studio in Newport Beach / Los Angeles. 
-
-Analyze this photo and respond with ONLY a JSON object — no markdown, no backticks:
-{
-  "pillar": "finished" or "bts" or "materials" or "lifestyle",
-  "project": "brief location or project name if determinable, otherwise empty string",
-  "room": "room type or subject (e.g. Living room, Kitchen, Primary bedroom, Marble slab, Hardware detail)",
-  "details": "comma-separated list of 3-5 specific materials, finishes, or design elements visible (e.g. honed marble fireplace, linen drapery, unlacquered brass hardware, walnut cabinetry)",
-  "mood": "the overall feeling of the space or image (e.g. warm and refined, quietly layered, coastal and relaxed)",
-  "material": "if this is a material close-up, name the specific material",
-  "brand": "brand name if any product is identifiable, otherwise empty string"
-}`
-            }
+            { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+            { type: 'text', text: `Analyze this interior design photo and respond with ONLY valid JSON, no markdown, no extra text:
+{"pillar":"finished or bts or materials or lifestyle","project":"location if obvious otherwise empty","room":"room type or subject eg Living room Kitchen Marble slab","details":"3-5 visible materials or elements comma separated","mood":"overall feeling eg warm and refined","material":"specific material if close-up otherwise empty","brand":"brand if identifiable otherwise empty"}` }
           ]
         }]
       })
     });
 
-    const data = await response.json();
-    const raw = data.content?.[0]?.text || '';
-    const clean = raw.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean);
+    if (!response.ok) throw new Error('API error');
 
-    // Auto-select the right pillar
+    const data = await response.json();
+    const raw = (data.content?.[0]?.text || '').replace(/```json|```/g, '').trim();
+
+    let parsed;
+    try { parsed = JSON.parse(raw); } catch(e) { throw new Error('Parse error'); }
+
+    // Select pillar
     if (parsed.pillar) {
       const pillarBtn = document.querySelector(`.pillar-btn[data-pillar="${parsed.pillar}"]`);
       if (pillarBtn) selectPillar(pillarBtn);
     }
 
-    // Fill in the fields after a short delay to let pillar render
+    // Fill fields with delay so pillar re-render completes
     setTimeout(() => {
-      const setVal = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
-      setVal('f-project', parsed.project);
-      setVal('f-room', parsed.room);
-      setVal('f-details', parsed.details);
-      setVal('f-mood', parsed.mood);
-      setVal('f-material', parsed.material);
-      setVal('f-brand', parsed.brand);
-      setVal('f-moment', parsed.room);
-    }, 100);
+      const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+      set('f-project', parsed.project);
+      set('f-room', parsed.room);
+      set('f-details', parsed.details);
+      set('f-mood', parsed.mood);
+      set('f-material', parsed.material);
+      set('f-brand', parsed.brand);
+      set('f-moment', parsed.room);
+    }, 150);
 
     msgEl.textContent = '✦ Brief filled in — review and edit before generating';
-    setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
+    setTimeout(() => { statusEl.style.display = 'none'; }, 3500);
 
   } catch(err) {
-    msgEl.textContent = 'Could not analyze photo — please fill in the brief manually.';
+    msgEl.textContent = 'Photo uploaded — fill in the brief below and generate.';
     setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
   }
 }
