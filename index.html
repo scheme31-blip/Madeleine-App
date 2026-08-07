@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madeleine Interiors — Content Studio</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream: #F5F1EB;
+  --warm-white: #FDFCFA;
+  --stone: #C8BFB0;
+  --taupe: #8E8278;
+  --charcoal: #2E2B28;
+  --accent: #6B5E52;
+  --line: #E2DAD0;
+  --gold: #B09A7A;
+}
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: var(--cream);
+  color: var(--charcoal);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+header {
+  background: var(--charcoal);
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--warm-white);
+  letter-spacing: 0.04em;
+}
+
+.logo em { font-style: italic; color: var(--stone); }
+
+.header-tag {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--taupe);
+}
+
+/* ── Layout ── */
+.app {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  min-height: calc(100vh - 60px);
+}
+
+/* ── Sidebar / Form ── */
+.sidebar {
+  background: var(--warm-white);
+  border-right: 1px solid var(--line);
+  padding: 32px 28px;
+  overflow-y: auto;
+}
+
+.sidebar-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 6px;
+  color: var(--charcoal);
+}
+
+.sidebar-sub {
+  font-size: 11px;
+  color: var(--taupe);
+  margin-bottom: 28px;
+  letter-spacing: 0.04em;
+}
+
+/* Pillar tabs */
+.pillars {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.pillar-btn {
+  border: 1px solid var(--line);
+  background: transparent;
+  padding: 10px 8px;
+  cursor: pointer;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--taupe);
+  text-align: left;
+  transition: all 0.15s;
+  border-radius: 2px;
+}
+
+.pillar-btn .pillar-icon { display: block; font-size: 16px; margin-bottom: 4px; }
+.pillar-btn .pillar-name { display: block; font-size: 11px; font-weight: 500; color: var(--charcoal); margin-bottom: 2px; }
+.pillar-btn .pillar-hint { display: block; font-size: 10px; color: var(--taupe); }
+
+.pillar-btn:hover { border-color: var(--stone); background: var(--cream); }
+.pillar-btn.active { border-color: var(--accent); background: var(--cream); }
+.pillar-btn.active .pillar-name { color: var(--accent); }
+
+/* Form fields */
+.field { margin-bottom: 20px; }
+
+.field label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin-bottom: 7px;
+}
+
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: var(--cream);
+  padding: 10px 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--charcoal);
+  border-radius: 2px;
+  outline: none;
+  transition: border-color 0.15s;
+  appearance: none;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus { border-color: var(--accent); }
+
+.field textarea { resize: vertical; min-height: 72px; }
+
+.field .hint {
+  font-size: 10px;
+  color: var(--taupe);
+  margin-top: 5px;
+  font-style: italic;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 24px 0;
+}
+
+/* Options row */
+.options-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.opt-chip {
+  border: 1px solid var(--line);
+  background: transparent;
+  padding: 5px 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  color: var(--taupe);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.12s;
+}
+
+.opt-chip:hover { border-color: var(--stone); color: var(--charcoal); }
+.opt-chip.active { border-color: var(--accent); background: var(--cream); color: var(--accent); }
+
+/* Generate button */
+.gen-btn {
+  width: 100%;
+  background: var(--charcoal);
+  color: var(--warm-white);
+  border: none;
+  padding: 14px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.15s;
+  margin-top: 8px;
+}
+
+.gen-btn:hover { background: var(--accent); }
+.gen-btn:disabled { background: var(--stone); cursor: not-allowed; }
+
+/* ── Output Panel ── */
+.output {
+  padding: 40px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.output-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--taupe);
+}
+
+.output-empty .empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.3;
+}
+
+.output-empty h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 300;
+  font-style: italic;
+  margin-bottom: 8px;
+  color: var(--stone);
+}
+
+.output-empty p {
+  font-size: 13px;
+  max-width: 300px;
+  line-height: 1.7;
+}
+
+/* Result card */
+.result-card {
+  display: none;
+}
+
+.result-card.visible { display: block; }
+
+.result-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.result-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* Caption block */
+.caption-block {
+  background: var(--warm-white);
+  border: 1px solid var(--line);
+  padding: 28px 32px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.caption-text {
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--charcoal);
+  white-space: pre-wrap;
+  font-weight: 300;
+  min-height: 60px;
+}
+
+.caption-text.streaming::after {
+  content: '▋';
+  animation: blink 0.8s infinite;
+  color: var(--accent);
+}
+
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+.caption-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.action-btn {
+  border: 1px solid var(--line);
+  background: transparent;
+  padding: 7px 16px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--taupe);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.12s;
+}
+
+.action-btn:hover { border-color: var(--accent); color: var(--accent); }
+.action-btn.copied { border-color: var(--gold); color: var(--gold); }
+
+/* Hashtags */
+.hashtag-block {
+  background: var(--warm-white);
+  border: 1px solid var(--line);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.hashtag-set {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 24px;
+}
+
+.htag {
+  font-size: 12px;
+  color: var(--accent);
+  background: var(--cream);
+  padding: 3px 10px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}
+
+/* Calendar row */
+.schedule-block {
+  background: var(--warm-white);
+  border: 1px solid var(--line);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.schedule-days {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.sday {
+  border: 1px solid var(--line);
+  padding: 12px;
+  border-radius: 2px;
+}
+
+.sday.highlighted { border-color: var(--accent); background: var(--cream); }
+
+.sday .day-name {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin-bottom: 4px;
+}
+
+.sday .day-type {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--charcoal);
+}
+
+.sday.highlighted .day-type { color: var(--accent); }
+.sday .day-note { font-size: 10px; color: var(--taupe); margin-top: 3px; }
+
+/* Loading state */
+.loading-bar {
+  height: 2px;
+  background: var(--line);
+  margin-bottom: 20px;
+  overflow: hidden;
+  border-radius: 1px;
+  display: none;
+}
+
+.loading-bar.active { display: block; }
+
+.loading-bar::after {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 30%;
+  background: var(--accent);
+  animation: slide 1.2s ease-in-out infinite;
+}
+
+@keyframes slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+
+.status-msg {
+  font-size: 11px;
+  color: var(--taupe);
+  font-style: italic;
+  margin-bottom: 20px;
+  min-height: 18px;
+  letter-spacing: 0.04em;
+}
+
+/* Claude steps box */
+.claude-steps-box {
+  background: var(--warm-white);
+  border: 1px solid var(--line);
+  padding: 24px 28px;
+  margin-bottom: 24px;
+}
+
+.cstep-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.cstep-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.cstep-row:last-child { border-bottom: none; }
+
+.cstep-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--stone);
+  min-width: 24px;
+  line-height: 1.2;
+}
+
+.cstep-text {
+  font-size: 13px;
+  color: var(--taupe);
+  line-height: 1.6;
+  padding-top: 3px;
+}
+
+.cstep-text strong { color: var(--charcoal); font-weight: 500; }
+.nav-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 0;
+  background: var(--warm-white);
+}
+
+.nav-tab {
+  padding: 14px 24px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.15s;
+}
+
+.nav-tab:hover { color: var(--charcoal); }
+.nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: flex; flex-direction: column; flex: 1; }
+
+/* ── History panel ── */
+.history-panel {
+  padding: 32px 40px;
+  overflow-y: auto;
+}
+
+.history-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--taupe);
+  padding: 80px 0;
+}
+
+.history-empty h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--stone);
+  margin-bottom: 8px;
+}
+
+.history-empty p { font-size: 13px; }
+
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.history-card {
+  background: var(--warm-white);
+  border: 1px solid var(--line);
+  padding: 22px 24px;
+  position: relative;
+  transition: border-color 0.15s;
+}
+
+.history-card:hover { border-color: var(--stone); }
+
+.hcard-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.hcard-pillar {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--cream);
+  padding: 3px 8px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}
+
+.hcard-date {
+  font-size: 10px;
+  color: var(--taupe);
+}
+
+.hcard-project {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--charcoal);
+  margin-bottom: 10px;
+}
+
+.hcard-caption {
+  font-size: 12px;
+  color: var(--taupe);
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.hcard-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 16px;
+}
+
+.hcard-tag {
+  font-size: 10px;
+  color: var(--accent);
+  background: var(--cream);
+  padding: 2px 7px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}
+
+.hcard-actions {
+  display: flex;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.hcard-btn {
+  border: 1px solid var(--line);
+  background: transparent;
+  padding: 5px 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--taupe);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.12s;
+  letter-spacing: 0.06em;
+}
+
+.hcard-btn:hover { border-color: var(--accent); color: var(--accent); }
+.hcard-btn.danger:hover { border-color: #c0392b; color: #c0392b; }
+.hcard-btn.copied { border-color: var(--gold); color: var(--gold); }
+.hcard-btn.published-active { border-color: #4a7c59; color: #4a7c59; background: #f0f7f2; }
+
+/* Published badge on card */
+.published-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #4a7c59;
+  background: #f0f7f2;
+  border: 1px solid #b8d9c4;
+  padding: 2px 8px;
+  border-radius: 2px;
+  margin-left: 6px;
+}
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+}
+
+.filter-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin-right: 4px;
+}
+
+.filter-chip {
+  border: 1px solid var(--line);
+  background: transparent;
+  padding: 5px 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  color: var(--taupe);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.12s;
+  letter-spacing: 0.06em;
+}
+
+.filter-chip:hover { border-color: var(--stone); color: var(--charcoal); }
+.filter-chip.active { border-color: var(--accent); background: var(--cream); color: var(--accent); }
+
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.history-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--charcoal);
+}
+
+.history-count {
+  font-size: 11px;
+  color: var(--taupe);
+  letter-spacing: 0.06em;
+}
+
+.clear-all-btn {
+  border: 1px solid var(--line);
+  background: transparent;
+  padding: 6px 14px;
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  color: var(--taupe);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.12s;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.clear-all-btn:hover { border-color: #c0392b; color: #c0392b; }
+
+/* Save toast */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: var(--charcoal);
+  color: var(--warm-white);
+  padding: 12px 20px;
+  font-size: 12px;
+  font-family: 'Jost', sans-serif;
+  border-radius: 2px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.2s;
+  pointer-events: none;
+  z-index: 200;
+}
+
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* ── How to Post panel ── */
+.howto-panel {
+  padding: 32px 40px;
+  overflow-y: auto;
+}
+
+.howto-header {
+  margin-bottom: 32px;
+}
+
+.howto-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--charcoal);
+  margin-bottom: 6px;
+}
+
+.howto-header p {
+  font-size: 13px;
+  color: var(--taupe);
+}
+
+.howto-section-title {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.howto-section { margin-bottom: 40px; }
+
+.steps-list { display: flex; flex-direction: column; gap: 0; }
+
+.step-row {
+  display: flex;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: flex-start;
+}
+
+.step-row:last-child { border-bottom: none; }
+
+.step-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--stone);
+  min-width: 28px;
+  line-height: 1.2;
+  padding-top: 2px;
+}
+
+.step-body { flex: 1; }
+
+.step-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--charcoal);
+  margin-bottom: 4px;
+}
+
+.step-desc {
+  font-size: 12.5px;
+  color: var(--taupe);
+  line-height: 1.7;
+}
+
+.step-desc strong { color: var(--charcoal); font-weight: 500; }
+.step-desc em { font-style: italic; color: var(--accent); }
+
+/* Tips columns */
+.howto-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.howto-tip-block {
+  background: var(--warm-white);
+  border: 1px solid var(--line);
+  padding: 22px 24px;
+}
+
+.tip-list { display: flex; flex-direction: column; gap: 8px; }
+
+.tip-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.tip-row:last-of-type { border-bottom: none; }
+
+.tip-day { font-weight: 500; color: var(--charcoal); }
+.tip-time { color: var(--taupe); font-size: 11px; }
+.tip-note { font-size: 11px; color: var(--taupe); font-style: italic; margin-top: 10px; line-height: 1.6; }
+
+/* Checklist */
+.checklist { display: flex; flex-direction: column; gap: 8px; }
+
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--charcoal);
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.check-item input[type=checkbox] {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Scheduler list */
+.scheduler-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+
+.scheduler-row {
+  font-size: 12px;
+  color: var(--taupe);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  line-height: 1.6;
+}
+
+.scheduler-row:last-child { border-bottom: none; }
+.scheduler-row strong { color: var(--charcoal); font-weight: 500; }
+.tip-desc { font-size: 12px; color: var(--taupe); line-height: 1.6; }
+
+@media (max-width: 768px) {
+  .howto-panel { padding: 24px 20px; }
+  .howto-cols { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Madeleine <em>Interiors</em></div>
+  <div class="header-tag">Content Studio</div>
+</header>
+
+<div class="app">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-title">New post</div>
+    <div class="sidebar-sub">Fill in the brief — get a caption, hashtags, and schedule.</div>
+
+    <!-- Pillar selection -->
+    <div class="field">
+      <label>Content pillar</label>
+      <div class="pillars">
+        <button class="pillar-btn active" data-pillar="finished" onclick="selectPillar(this)">
+          <span class="pillar-icon">🏛</span>
+          <span class="pillar-name">Finished Work</span>
+          <span class="pillar-hint">Room reveals & projects</span>
+        </button>
+        <button class="pillar-btn" data-pillar="bts" onclick="selectPillar(this)">
+          <span class="pillar-icon">🔨</span>
+          <span class="pillar-name">Behind the Scenes</span>
+          <span class="pillar-hint">Progress & sourcing</span>
+        </button>
+        <button class="pillar-btn" data-pillar="materials" onclick="selectPillar(this)">
+          <span class="pillar-icon">🪨</span>
+          <span class="pillar-name">Materials</span>
+          <span class="pillar-hint">Close-ups & details</span>
+        </button>
+        <button class="pillar-btn" data-pillar="lifestyle" onclick="selectPillar(this)">
+          <span class="pillar-icon">🥂</span>
+          <span class="pillar-name">Studio Life</span>
+          <span class="pillar-hint">Events & moments</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Dynamic fields -->
+    <div id="dynamic-fields">
+      <!-- Injected by JS based on pillar -->
+    </div>
+
+    <hr class="divider">
+
+    <!-- Tone -->
+    <div class="field">
+      <label>Tone emphasis</label>
+      <div class="options-row" id="tone-chips">
+        <button class="opt-chip active" data-val="craftsmanship" onclick="toggleChip(this, 'tone')">Craftsmanship</button>
+        <button class="opt-chip" data-val="client-story" onclick="toggleChip(this, 'tone')">Client story</button>
+        <button class="opt-chip" data-val="process" onclick="toggleChip(this, 'tone')">Process</button>
+        <button class="opt-chip" data-val="feeling" onclick="toggleChip(this, 'tone')">Feeling</button>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="field">
+      <label>End with</label>
+      <div class="options-row" id="cta-chips">
+        <button class="opt-chip active" data-val="question" onclick="toggleChip(this, 'cta')">A question</button>
+        <button class="opt-chip" data-val="observation" onclick="toggleChip(this, 'cta')">An observation</button>
+        <button class="opt-chip" data-val="none" onclick="toggleChip(this, 'cta')">Nothing extra</button>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <button class="gen-btn" id="gen-btn" onclick="generate()">Generate content</button>
+  </div>
+
+  <!-- Right side with tabs -->
+  <div style="display:flex; flex-direction:column; overflow:hidden;">
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab('generate', this)">Generate</button>
+    <button class="nav-tab" onclick="switchTab('history', this)">Post history <span id="history-badge"></span></button>
+    <button class="nav-tab" onclick="switchTab('howto', this)">How to post</button>
+  </div>
+
+  <!-- Generate tab -->
+  <div class="tab-panel active" id="tab-generate">
+  <div class="output" id="output-panel">
+    <div class="output-empty" id="empty-state">
+      <div class="empty-icon">✦</div>
+      <h2>Ready when you are</h2>
+      <p>Fill in the brief on the left and click Generate — Claude.ai will open automatically.</p>
+    </div>
+
+    <div class="result-card" id="result-card">
+
+      <!-- Step 1: Instructions shown after clicking Generate -->
+      <div id="claude-instructions" style="display:none;">
+        <div class="claude-steps-box">
+          <div class="cstep-label">Your brief is ready — 3 quick steps</div>
+          <div class="cstep-row">
+            <div class="cstep-num">1</div>
+            <div class="cstep-text">Your brief was <strong>copied to your clipboard</strong> and Claude.ai opened in a new tab</div>
+          </div>
+          <div class="cstep-row">
+            <div class="cstep-num">2</div>
+            <div class="cstep-text">In Claude.ai, <strong>paste</strong> (Cmd+V / Ctrl+V) into the chat and hit send</div>
+          </div>
+          <div class="cstep-row">
+            <div class="cstep-num">3</div>
+            <div class="cstep-text">Copy Claude's full response and <strong>paste it below</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Paste area -->
+      <div id="paste-area-wrap" style="display:none; margin-bottom:20px;">
+        <div class="result-label">Paste Claude's response here</div>
+        <div class="caption-block" style="padding:0;">
+          <textarea id="paste-area" placeholder="Paste Claude's full response here — caption, hashtags, everything..." style="width:100%; min-height:180px; border:none; background:transparent; padding:24px 28px; font-family:'Jost',sans-serif; font-size:13px; font-weight:300; color:var(--charcoal); resize:vertical; outline:none; line-height:1.7;"></textarea>
+        </div>
+        <button class="gen-btn" onclick="handlePaste()" style="margin-top:10px;">Extract caption &amp; hashtags</button>
+      </div>
+
+      <!-- Step 3: Results shown after paste -->
+      <div id="result-sections" style="display:none;">
+        <div class="loading-bar" id="loading-bar"></div>
+        <div class="status-msg" id="status-msg"></div>
+
+        <div class="result-label">Caption</div>
+        <div class="caption-block">
+          <div class="caption-text" id="caption-out"></div>
+          <div class="caption-actions">
+            <button class="action-btn" id="copy-caption-btn" onclick="copyCaption()">Copy caption</button>
+            <button class="action-btn" onclick="generate()">Try again</button>
+            <button class="action-btn" id="save-btn" onclick="saveCurrentPost()">Save to history</button>
+          </div>
+        </div>
+
+        <div class="result-label">Hashtags <span style="font-size:10px; color:var(--taupe); letter-spacing:0; text-transform:none; font-style:italic;">— paste in first comment</span></div>
+        <div class="hashtag-block">
+          <div class="hashtag-set" id="hashtag-out"></div>
+          <div class="caption-actions" style="margin-top:16px; padding-top:12px;">
+            <button class="action-btn" id="copy-tags-btn" onclick="copyHashtags()">Copy hashtags</button>
+          </div>
+        </div>
+
+        <div class="result-label">Suggested posting day</div>
+        <div class="schedule-block">
+          <div class="schedule-days" id="schedule-out"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </div><!-- end tab-generate -->
+
+  <!-- History tab -->
+  <div class="tab-panel" id="tab-history">
+    <div class="history-panel">
+      <div class="history-header">
+        <h2>Post history</h2>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <span class="history-count" id="history-count"></span>
+          <button class="clear-all-btn" onclick="clearAll()">Clear all</button>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <span class="filter-label">Filter</span>
+        <button class="filter-chip active" data-filter="all" onclick="setFilter('all', this)">All</button>
+        <button class="filter-chip" data-filter="finished" onclick="setFilter('finished', this)">Finished Work</button>
+        <button class="filter-chip" data-filter="bts" onclick="setFilter('bts', this)">Behind the Scenes</button>
+        <button class="filter-chip" data-filter="materials" onclick="setFilter('materials', this)">Materials</button>
+        <button class="filter-chip" data-filter="lifestyle" onclick="setFilter('lifestyle', this)">Studio Life</button>
+        <button class="filter-chip" data-filter="published" onclick="setFilter('published', this)">✦ Published</button>
+      </div>
+      <div id="history-content"></div>
+    </div>
+  </div>
+
+  <!-- How to Post tab -->
+  <div class="tab-panel" id="tab-howto">
+    <div class="howto-panel">
+
+      <div class="howto-header">
+        <h2>How to post on Instagram</h2>
+        <p>Follow these steps each time you're ready to publish a finished post from the generator.</p>
+      </div>
+
+      <div class="howto-sections">
+
+        <!-- Step by step -->
+        <div class="howto-section">
+          <div class="howto-section-title">Step-by-step posting guide</div>
+          <div class="steps-list">
+
+            <div class="step-row">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <div class="step-title">Generate & copy your caption</div>
+                <div class="step-desc">Use the Generate tab to create your caption. Once you're happy with it, click <strong>Copy caption</strong>. Save it to history so you have a record.</div>
+              </div>
+            </div>
+
+            <div class="step-row">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <div class="step-title">Copy your hashtags separately</div>
+                <div class="step-desc">Click <strong>Copy hashtags</strong> — keep these separate from the caption. You'll paste them into the <em>first comment</em> after posting, not in the caption itself. This keeps the caption clean.</div>
+              </div>
+            </div>
+
+            <div class="step-row">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <div class="step-title">Open Instagram and tap +</div>
+                <div class="step-desc">Open the Instagram app on your phone. Tap the <strong>+</strong> icon at the bottom center of the screen to start a new post.</div>
+              </div>
+            </div>
+
+            <div class="step-row">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <div class="step-title">Select your photo or video</div>
+                <div class="step-desc">Choose from your camera roll, or take a new photo. For project photos, select <strong>Post</strong> (square grid icon). For short videos or process clips, select <strong>Reel</strong>. Tap <strong>Next</strong>.</div>
+              </div>
+            </div>
+
+            <div class="step-row">
+              <div class="step-num">5</div>
+              <div class="step-body">
+                <div class="step-title">Edit & filter (optional)</div>
+                <div class="step-desc">Apply any filters or adjustments. For Madeleine Interiors, keep edits minimal — warm tones, no heavy filters. Aim to match the natural palette of the space. Tap <strong>Next</strong>.</div>
+              </div>
+            </div>
+
+            <div class="step-row">
+              <div class="step-num">6</div>
+              <div class="step-body">
+                <div class="step-title">Paste your caption</div>
+                <div class="step-desc">Tap the <strong>Write a caption…</strong> field and paste your copied caption. Read it once more — this is the moment to add one personal sentence if Madeleine wants to. Do <em>not</em> paste the hashtags here.</div>
+              </div>
+            </div>
+
+            <div class="step-row">
+              <div class="step-num">7</div>
+              <div class="step-body">
+                <div class="step-title">Add location tag</div>
+                <div class="step-desc">Tap <strong>Add location</strong> and search for the neighborhood or city — e.g. "Newport Beach, California" or "Brentwood, Los Angeles." Location tagging improves discoverability significantly.</div>
+              </div>
+            </div>
+
+            <div class="step-row">
+              <div class="step-num">8</div>
+              <div class="step-body">
+                <div class="step-title">Tag collaborators (if relevant)</div>
+                <div class="step-desc">If the post features a contractor, vendor, or photographer, tap <strong>Tag people</strong> or use <strong>@mention</strong> in the caption. For product close-ups, tag the brand (e.g. @greatplainsfabrics, @visualcomfort).</div>
+              </div>
+            </div>
+
+            <div class="step-row">
+              <div class="step-num">9</div>
+              <div class="step-body">
+                <div class="step-title">Share the post</div>
+                <div class="step-desc">Tap <strong>Share</strong>. Your post is now live. Don't close Instagram yet — you have one more step.</div>
+              </div>
+            </div>
+
+            <div class="step-row">
+              <div class="step-num">10</div>
+              <div class="step-body">
+                <div class="step-title">Paste hashtags in the first comment</div>
+                <div class="step-desc">Immediately after posting, tap the speech bubble icon on your post to open comments. Tap <strong>Add a comment…</strong> and paste your copied hashtags. Post the comment. This keeps the caption visually clean while still getting the hashtag reach.</div>
+              </div>
+            </div>
+
+            <div class="step-row">
+              <div class="step-num">11</div>
+              <div class="step-body">
+                <div class="step-title">Mark as published in history</div>
+                <div class="step-desc">Come back to the <strong>Post history</strong> tab and click <strong>Mark published</strong> on the card. This keeps your records clean and lets you filter what's gone live vs. what's still in the queue.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="howto-cols">
+          <div class="howto-tip-block">
+            <div class="howto-section-title">Best times to post</div>
+            <div class="tip-list">
+              <div class="tip-row"><span class="tip-day">Monday</span><span class="tip-time">8–10 am or 6–8 pm PT</span></div>
+              <div class="tip-row"><span class="tip-day">Wednesday</span><span class="tip-time">11 am–1 pm PT</span></div>
+              <div class="tip-row"><span class="tip-day">Friday</span><span class="tip-time">9–11 am PT</span></div>
+              <div class="tip-note">Newport Beach / LA audience — Pacific Time. Avoid posting after 9 pm or before 7 am.</div>
+            </div>
+          </div>
+
+          <div class="howto-tip-block">
+            <div class="howto-section-title">Quick checklist before every post</div>
+            <div class="checklist">
+              <label class="check-item"><input type="checkbox"> Caption copied &amp; reviewed</label>
+              <label class="check-item"><input type="checkbox"> Hashtags copied separately</label>
+              <label class="check-item"><input type="checkbox"> Photo looks true to the space</label>
+              <label class="check-item"><input type="checkbox"> Location tag added</label>
+              <label class="check-item"><input type="checkbox"> Vendors/collaborators tagged</label>
+              <label class="check-item"><input type="checkbox"> Hashtags posted in first comment</label>
+              <label class="check-item"><input type="checkbox"> Marked as published in history</label>
+            </div>
+          </div>
+
+          <div class="howto-tip-block">
+            <div class="howto-section-title">Using a scheduler instead</div>
+            <div class="tip-desc">If you prefer to schedule posts in advance, these tools work well with Madeleine Interiors' posting rhythm:</div>
+            <div class="scheduler-list">
+              <div class="scheduler-row"><strong>Later</strong> — best visual grid planner, drag-and-drop calendar</div>
+              <div class="scheduler-row"><strong>Planoly</strong> — popular with designers, good analytics</div>
+              <div class="scheduler-row"><strong>Instagram's native scheduler</strong> — free, available in the app under Advanced Settings when creating a post. Schedule up to 75 days ahead.</div>
+            </div>
+            <div class="tip-note" style="margin-top:12px;">Note: scheduled posts don't auto-add the first-comment hashtags — you'll still need to do that manually after the post goes live.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  </div><!-- end right side -->
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SYSTEM_PROMPT = `You are the content writer for Madeleine Interiors, a refined interior design studio based in Newport Beach and Los Angeles, California.
+
+About Madeleine Galardo: She founded Madeleine Interiors in 2012. She grew up in a family of furniture makers — design is in her DNA. She trained under Joe Nye (classical, detail-obsessed, comfort and entertaining with style), Betsy Burnham (traditional mix-master, colorist, whimsy meets preppy), and Molly Isaksen (practical, business + creative mindset, sourcing expertise). Her style is new traditional — contemporary and classic, restful, livable, comfort-forward. Her philosophy: "Every single piece can tell a story that works together." "It starts with a feeling." "I learned to tap into the unsaid." "That is when the magic happens — making a house a home."
+
+Caption voice rules:
+- Professional, polished, quietly confident — never salesy
+- First person plural ("we") for project work; first person singular ("I") for personal/lifestyle posts
+- Short, purposeful sentences
+- Name materials, places, and collaborators specifically — never vague adjectives like "beautiful" or "stunning"
+- No exclamation points, no emojis
+- No generic openers like "So excited to share..."
+- No hashtags in the caption body
+- 3–5 sentences for project posts; 2–4 for BTS/detail posts
+- Weave in Madeleine's philosophy naturally when it fits — don't force it
+
+You will receive a brief and must respond with ONLY a JSON object in this exact format (no markdown, no backticks, no extra text):
+{"caption":"the full caption text","hashtags":["tag1","tag2","tag3","tag4","tag5","tag6","tag7","tag8","tag9","tag10"],"postingDay":"Monday","postingDayReason":"brief reason why"}
+
+Hashtag rules: 8–12 tags total, mix of: 2-3 core brand tags, 2-3 location/style tags, 2-3 room/project specific tags, 1-2 process or detail tags. Do not include # symbol — just the word.`;
+
+let currentPillar = 'finished';
+let currentTone = 'craftsmanship';
+let currentCTA = 'question';
+let lastCaption = '';
+let lastHashtags = [];
+let lastPostingDay = 'Monday';
+
+const pillarFields = {
+  finished: `
+    <div class="field">
+      <label>Project name or location</label>
+      <input type="text" id="f-project" placeholder="e.g. Canary Drive, Newport Beach" />
+    </div>
+    <div class="field">
+      <label>Room type</label>
+      <input type="text" id="f-room" placeholder="e.g. Living room, Primary bedroom, Kitchen" />
+    </div>
+    <div class="field">
+      <label>Key design details</label>
+      <textarea id="f-details" placeholder="e.g. Honed marble fireplace, linen drapery, brass hardware, walnut cabinetry"></textarea>
+      <div class="hint">2–4 specific materials or elements work best</div>
+    </div>
+    <div class="field">
+      <label>Mood or feeling</label>
+      <input type="text" id="f-mood" placeholder="e.g. Warm and refined, relaxed coastal, quietly layered" />
+    </div>`,
+
+  bts: `
+    <div class="field">
+      <label>Project name or location</label>
+      <input type="text" id="f-project" placeholder="e.g. Spyglass Hill, Corona del Mar" />
+    </div>
+    <div class="field">
+      <label>What's happening</label>
+      <textarea id="f-details" placeholder="e.g. Tile is being set in the primary bath, we just approved stone slabs, sourcing fabric for the living room"></textarea>
+    </div>
+    <div class="field">
+      <label>Project timeline context (optional)</label>
+      <input type="text" id="f-timeline" placeholder="e.g. 8 months in, final stretch, just breaking ground" />
+    </div>`,
+
+  materials: `
+    <div class="field">
+      <label>Material or product</label>
+      <input type="text" id="f-material" placeholder="e.g. Honed Calacatta marble, Great Plains linen, unlacquered brass knob" />
+    </div>
+    <div class="field">
+      <label>Brand or source (optional)</label>
+      <input type="text" id="f-brand" placeholder="e.g. Great Plains, Walker Zanger, Visual Comfort" />
+    </div>
+    <div class="field">
+      <label>Why it was chosen or what makes it special</label>
+      <textarea id="f-details" placeholder="e.g. The movement in this stone is unlike anything we've sourced — no two slabs the same"></textarea>
+    </div>`,
+
+  lifestyle: `
+    <div class="field">
+      <label>Type of moment</label>
+      <input type="text" id="f-moment" placeholder="e.g. Industry event, client dinner, design inspiration trip, trade show" />
+    </div>
+    <div class="field">
+      <label>Brief description</label>
+      <textarea id="f-details" placeholder="e.g. Attended the Decorative Arts Society event in Newport, incredible collection of antique textiles"></textarea>
+    </div>
+    <div class="field">
+      <label>What was meaningful or inspiring (optional)</label>
+      <input type="text" id="f-feeling" placeholder="e.g. A reminder of why craftsmanship matters" />
+    </div>`
+};
+
+const scheduleMap = {
+  finished: { day: 'Monday', reason: 'Strongest content anchors the week' },
+  bts: { day: 'Wednesday', reason: 'Mid-week process content keeps momentum' },
+  materials: { day: 'Wednesday', reason: 'Detail posts perform well mid-week' },
+  lifestyle: { day: 'Friday', reason: 'Personal content closes the week warmly' }
+};
+
+function selectPillar(btn) {
+  document.querySelectorAll('.pillar-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentPillar = btn.dataset.pillar;
+  document.getElementById('dynamic-fields').innerHTML = pillarFields[currentPillar];
+}
+
+function toggleChip(btn, group) {
+  const parent = btn.closest('.options-row') || btn.parentElement;
+  parent.querySelectorAll('.opt-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  if (group === 'tone') currentTone = btn.dataset.val;
+  if (group === 'cta') currentCTA = btn.dataset.val;
+}
+
+function buildBrief() {
+  const get = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+  let brief = `Pillar: ${currentPillar}\nTone emphasis: ${currentTone}\nEnd with: ${currentCTA}\n`;
+
+  if (currentPillar === 'finished') {
+    brief += `Project: ${get('f-project')}\nRoom: ${get('f-room')}\nKey details: ${get('f-details')}\nMood: ${get('f-mood')}`;
+  } else if (currentPillar === 'bts') {
+    brief += `Project: ${get('f-project')}\nWhat's happening: ${get('f-details')}\nTimeline: ${get('f-timeline')}`;
+  } else if (currentPillar === 'materials') {
+    brief += `Material: ${get('f-material')}\nBrand: ${get('f-brand')}\nWhy special: ${get('f-details')}`;
+  } else if (currentPillar === 'lifestyle') {
+    brief += `Moment: ${get('f-moment')}\nDescription: ${get('f-details')}\nMeaning: ${get('f-feeling')}`;
+  }
+
+  return brief;
+}
+
+function setStatus(msg) {
+  document.getElementById('status-msg').textContent = msg;
+}
+
+function showResult() {
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('result-card').classList.add('visible');
+}
+
+function renderSchedule(day) {
+  const days = ['Monday', 'Wednesday', 'Friday'];
+  const types = { Monday: 'Project Showcase', Wednesday: 'Process or Detail', Friday: 'Studio Life' };
+  const notes = { Monday: 'Finished work', Wednesday: 'BTS / Materials', Friday: 'Lifestyle' };
+
+  return days.map(d => `
+    <div class="sday ${d === day ? 'highlighted' : ''}">
+      <div class="day-name">${d}</div>
+      <div class="day-type">${types[d]}</div>
+      <div class="day-note">${notes[d]}</div>
+    </div>`).join('');
+}
+
+async function generate() {
+  const brief = buildBrief();
+  const btn = document.getElementById('gen-btn');
+  const captionOut = document.getElementById('caption-out');
+  const hashtagOut = document.getElementById('hashtag-out');
+  const loadingBar = document.getElementById('loading-bar');
+
+  btn.disabled = true;
+  btn.textContent = 'Generating...';
+  showResult();
+  document.getElementById('claude-instructions').style.display = 'none';
+  document.getElementById('paste-area-wrap').style.display = 'none';
+  document.getElementById('result-sections').style.display = 'block';
+  loadingBar.classList.add('active');
+  captionOut.textContent = '';
+  captionOut.classList.add('streaming');
+  hashtagOut.innerHTML = '';
+  setStatus('Drafting your caption...');
+
+  try {
+    const response = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: `Here is the post brief:\n\n${brief}\n\nGenerate the caption and hashtags now.` }]
+      })
+    });
+
+    const data = await response.json();
+    const raw = data.content?.[0]?.text || '';
+
+    let parsed;
+    try {
+      const clean = raw.replace(/```json|```/g, '').trim();
+      parsed = JSON.parse(clean);
+    } catch(e) {
+      captionOut.classList.remove('streaming');
+      captionOut.textContent = raw;
+      setStatus('');
+      return;
+    }
+
+    captionOut.textContent = '';
+    lastCaption = parsed.caption || '';
+    lastHashtags = parsed.hashtags || [];
+
+    const words = lastCaption.split(' ');
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < words.length) {
+        captionOut.textContent += (i === 0 ? '' : ' ') + words[i];
+        i++;
+      } else {
+        clearInterval(interval);
+        captionOut.classList.remove('streaming');
+        setStatus('');
+        hashtagOut.innerHTML = lastHashtags.map(t => `<span class="htag">#${t}</span>`).join('');
+        const sched = scheduleMap[currentPillar];
+        lastPostingDay = parsed.postingDay || sched.day;
+        document.getElementById('schedule-out').innerHTML = renderSchedule(lastPostingDay);
+      }
+    }, 40);
+
+  } catch(err) {
+    captionOut.classList.remove('streaming');
+    captionOut.textContent = 'Something went wrong. Please try again.';
+    setStatus('');
+  } finally {
+    loadingBar.classList.remove('active');
+    btn.disabled = false;
+    btn.textContent = 'Generate content';
+  }
+}
+
+function regenerate() {
+  generate();
+}
+
+function handlePaste() {
+  const raw = document.getElementById('paste-area').value.trim();
+  if (!raw) return;
+
+  // Try to extract caption and hashtags from Claude's response
+  const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+
+  // Find hashtags line — look for a line starting with # or the hashtag label
+  let captionLines = [];
+  let hashtagLine = '';
+  let inCaption = true;
+
+  for (const line of lines) {
+    const lower = line.toLowerCase();
+    if (lower.includes('hashtag') || lower.startsWith('#interiordesign') || line.startsWith('#')) {
+      inCaption = false;
+      if (line.startsWith('#')) hashtagLine += ' ' + line;
+      continue;
+    }
+    if (!inCaption) {
+      if (line.startsWith('#') || lower.includes('#')) hashtagLine += ' ' + line;
+      continue;
+    }
+    // Skip label lines like "1. Caption:" or "Caption:"
+    if (/^(caption|1\.|here'?s?|post caption)/i.test(line)) continue;
+    captionLines.push(line);
+  }
+
+  // Extract hashtags — find all #words
+  const tagMatches = raw.match(/#\w+/g) || [];
+  lastHashtags = tagMatches.map(t => t.replace('#', ''));
+
+  // Caption is everything before hashtags section
+  const hashtagIdx = raw.search(/#\w+/);
+  let captionRaw = hashtagIdx > 0 ? raw.substring(0, hashtagIdx) : raw;
+  // Clean up label lines
+  captionRaw = captionRaw.replace(/^(caption:?|1\.|here'?s?.*caption.*:?|post caption:?)\s*/gim, '').trim();
+  lastCaption = captionRaw;
+
+  // Try to find posting day
+  const dayMatch = raw.match(/\b(Monday|Wednesday|Friday)\b/i);
+  lastPostingDay = dayMatch ? dayMatch[0] : scheduleMap[currentPillar].day;
+
+  // Show results
+  document.getElementById('claude-instructions').style.display = 'none';
+  document.getElementById('paste-area-wrap').style.display = 'none';
+  document.getElementById('result-sections').style.display = 'block';
+
+  const captionOut = document.getElementById('caption-out');
+  captionOut.textContent = lastCaption;
+
+  document.getElementById('hashtag-out').innerHTML = lastHashtags.map(t => `<span class="htag">#${t}</span>`).join('');
+  document.getElementById('schedule-out').innerHTML = renderSchedule(lastPostingDay);
+}
+
+function saveCurrentPost() {
+  if (!lastCaption) return;
+  savePost(lastCaption, lastHashtags, currentPillar, lastPostingDay || 'Monday');
+  const btn = document.getElementById('save-btn');
+  btn.textContent = 'Saved ✦';
+  setTimeout(() => { btn.textContent = 'Save to history'; }, 2000);
+}
+
+function copyCaption() {
+  if (!lastCaption) return;
+  navigator.clipboard.writeText(lastCaption).then(() => {
+    const btn = document.getElementById('copy-caption-btn');
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy caption'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function copyHashtags() {
+  if (!lastHashtags.length) return;
+  const text = lastHashtags.map(t => `#${t}`).join(' ');
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-tags-btn');
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy hashtags'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ── Tab switching ──
+function switchTab(tab, btn) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'history') renderHistory();
+}
+
+// ── Toast ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ── History storage (in-memory, persisted to window.storage if available) ──
+let postHistory = [];
+
+async function loadHistory() {
+  try {
+    const result = await window.storage.get('mi-post-history');
+    if (result && result.value) {
+      postHistory = JSON.parse(result.value);
+    }
+  } catch(e) {
+    postHistory = [];
+  }
+  updateBadge();
+}
+
+async function saveHistory() {
+  try {
+    await window.storage.set('mi-post-history', JSON.stringify(postHistory));
+  } catch(e) {}
+  updateBadge();
+}
+
+function updateBadge() {
+  const badge = document.getElementById('history-badge');
+  const count = document.getElementById('history-count');
+  if (postHistory.length > 0) {
+    badge.textContent = `(${postHistory.length})`;
+    if (count) count.textContent = `${postHistory.length} saved post${postHistory.length !== 1 ? 's' : ''}`;
+  } else {
+    badge.textContent = '';
+    if (count) count.textContent = '';
+  }
+}
+
+function savePost(caption, hashtags, pillar, postingDay) {
+  const get = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+  let label = '';
+  if (pillar === 'finished' || pillar === 'bts') label = get('f-project') || get('f-room') || 'Untitled project';
+  else if (pillar === 'materials') label = get('f-material') || 'Material detail';
+  else label = get('f-moment') || 'Studio moment';
+
+  const entry = {
+    id: Date.now(),
+    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+    pillar,
+    label,
+    caption,
+    hashtags,
+    postingDay
+  };
+
+  postHistory.unshift(entry);
+  if (postHistory.length > 50) postHistory = postHistory.slice(0, 50);
+  saveHistory();
+  showToast('Post saved to history');
+}
+
+const pillarLabels = {
+  finished: 'Finished Work',
+  bts: 'Behind the Scenes',
+  materials: 'Materials',
+  lifestyle: 'Studio Life'
+};
+
+let activeFilter = 'all';
+
+function setFilter(filter, btn) {
+  activeFilter = filter;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  renderHistory();
+}
+
+function filteredHistory() {
+  if (activeFilter === 'all') return postHistory;
+  if (activeFilter === 'published') return postHistory.filter(p => p.published);
+  return postHistory.filter(p => p.pillar === activeFilter);
+}
+
+function renderHistory() {
+  const container = document.getElementById('history-content');
+  updateBadge();
+
+  const posts = filteredHistory();
+
+  if (postHistory.length === 0) {
+    container.innerHTML = `
+      <div class="history-empty">
+        <h2>No posts saved yet</h2>
+        <p>Generate your first caption and save it — it will appear here.</p>
+      </div>`;
+    return;
+  }
+
+  if (posts.length === 0) {
+    container.innerHTML = `
+      <div class="history-empty">
+        <h2>No posts in this filter</h2>
+        <p>Try a different pillar or switch back to All.</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = `<div class="history-grid">${posts.map(p => `
+    <div class="history-card${p.published ? ' published-card' : ''}" id="hcard-${p.id}" style="${p.published ? 'border-color:#b8d9c4;' : ''}">
+      <div class="hcard-meta">
+        <span style="display:flex;align-items:center;gap:6px;">
+          <span class="hcard-pillar">${pillarLabels[p.pillar] || p.pillar}</span>
+          ${p.published ? '<span class="published-badge">✦ Published</span>' : ''}
+        </span>
+        <span class="hcard-date">${p.date} · ${p.postingDay}</span>
+      </div>
+      <div class="hcard-project">${escHtml(p.label)}</div>
+      <div class="hcard-caption">${escHtml(p.caption)}</div>
+      <div class="hcard-tags">${(p.hashtags || []).slice(0, 5).map(t => `<span class="hcard-tag">#${escHtml(t)}</span>`).join('')}${p.hashtags && p.hashtags.length > 5 ? `<span class="hcard-tag">+${p.hashtags.length - 5}</span>` : ''}</div>
+      <div class="hcard-actions">
+        <button class="hcard-btn" onclick="copySaved(${p.id}, 'caption', this)">Copy caption</button>
+        <button class="hcard-btn" onclick="copySaved(${p.id}, 'tags', this)">Copy hashtags</button>
+        <button class="hcard-btn ${p.published ? 'published-active' : ''}" onclick="togglePublished(${p.id}, this)">${p.published ? '✦ Published' : 'Mark published'}</button>
+        <button class="hcard-btn danger" onclick="deletePost(${p.id})">Delete</button>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+function togglePublished(id, btn) {
+  const post = postHistory.find(p => p.id === id);
+  if (!post) return;
+  post.published = !post.published;
+  saveHistory();
+  renderHistory();
+  showToast(post.published ? 'Marked as published ✦' : 'Unmarked');
+}
+
+function escHtml(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function copySaved(id, type, btn) {
+  const post = postHistory.find(p => p.id === id);
+  if (!post) return;
+  const text = type === 'caption' ? post.caption : post.hashtags.map(t => `#${t}`).join(' ');
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function deletePost(id) {
+  postHistory = postHistory.filter(p => p.id !== id);
+  saveHistory();
+  renderHistory();
+}
+
+async function clearAll() {
+  if (!postHistory.length) return;
+  if (confirm('Clear all saved posts? This cannot be undone.')) {
+    postHistory = [];
+    await saveHistory();
+    renderHistory();
+  }
+}
+
+// ── Init ──
+document.getElementById('dynamic-fields').innerHTML = pillarFields['finished'];
+loadHistory();
+</script>
+</body>
+</html>
