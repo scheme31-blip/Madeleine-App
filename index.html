@@ -1651,23 +1651,40 @@ async function generate() {
         max_tokens: 1000,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: currentPhotoBase64 ? [
-          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: currentPhotoBase64 } },
+          { type: 'image', source: { type: 'base64', media_type: currentPhotoMediaType || 'image/jpeg', data: currentPhotoBase64 } },
           { type: 'text', text: `Here is the post brief:\n\n${brief}\n\nGenerate the caption and hashtags now. Use the photo for additional visual context about materials, mood, and details.` }
         ] : `Here is the post brief:\n\n${brief}\n\nGenerate the caption and hashtags now.` }]
       })
     });
 
     const data = await response.json();
+
+    // Show any API-level errors
+    if (data.error) {
+      captionOut.classList.remove('streaming');
+      captionOut.textContent = `API error: ${data.error.message || JSON.stringify(data.error)}`;
+      setStatus('');
+      return;
+    }
+
     const raw = data.content?.[0]?.text || '';
+    if (!raw) {
+      captionOut.classList.remove('streaming');
+      captionOut.textContent = `No response from API. Full response: ${JSON.stringify(data).substring(0, 200)}`;
+      setStatus('');
+      return;
+    }
 
     let parsed;
     try {
       const clean = raw.replace(/```json|```/g, '').trim();
       parsed = JSON.parse(clean);
     } catch(e) {
+      // Not JSON — just show the raw text directly
       captionOut.classList.remove('streaming');
+      lastCaption = raw;
       captionOut.textContent = raw;
-      setStatus('');
+      setStatus('Caption generated — copy and edit as needed');
       return;
     }
 
@@ -1694,7 +1711,7 @@ async function generate() {
 
   } catch(err) {
     captionOut.classList.remove('streaming');
-    captionOut.textContent = 'Something went wrong. Please try again.';
+    captionOut.textContent = `Error: ${err.message || 'Unknown error. Check your connection and try again.'}`;
     setStatus('');
   } finally {
     loadingBar.classList.remove('active');
